@@ -1,0 +1,27 @@
+
+    stages{
+        stage('git checkout'){
+            steps{
+                git 'https://github.com/chandureddy0816/jenkins_pipeline.git'
+            }
+        }
+        stage('Build Maven'){
+            steps{
+                sh 'mvn clean install -DskipTests=true'
+            }
+        }
+        stage("Docker Build") {
+	        steps {
+	            sh 'docker build -t chandureddy0816/jenkins_pipeline:${ImageTag} .
+	        }
+        }
+        stage("Docker Push") {
+	        steps {
+               withCredentials([usernamePassword(credentialsId: 'docker_credentials', passwordVariable: 'docker_password', usernameVariable: 'docker_username')]) {
+                   sh 'docker login -u ${docker_username} -p ${docker_password}'
+               }
+               sh 'docker push chandureddy0816/jenkins_pipeline:${ImageTag}'
+           }
+        }
+    }
+}
