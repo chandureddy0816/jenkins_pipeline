@@ -9,7 +9,7 @@ pipeline{
     stages{
         stage('git checkout'){
             steps{
-                git 'https://github.com/Naresh240/spring-boot-hello.git'
+                git 'https://github.com/chandureddy0816/jenkins_pipeline.git'
             }
         }
         stage('Build Maven'){
@@ -19,7 +19,7 @@ pipeline{
         }
         stage("Docker Build") {
 	        steps {
-	            sh 'docker build -t naresh240/spring-boot-hello:${ImageTag} .'
+	            sh 'docker build -t chandureddy0816/jenkins_pipeline:${ImageTag} .'
 	        }
         }
         stage("Docker Push") {
@@ -27,7 +27,7 @@ pipeline{
                withCredentials([usernamePassword(credentialsId: 'docker_credentials', passwordVariable: 'docker_password', usernameVariable: 'docker_username')]) {
                    sh 'docker login -u ${docker_username} -p ${docker_password}'
                }
-               sh 'docker push naresh240/spring-boot-hello:${ImageTag}'
+               sh 'docker push chandureddy0816/jenkins_pipeline:${ImageTag}'
            }
         }
     }
